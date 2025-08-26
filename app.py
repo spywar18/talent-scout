@@ -88,7 +88,7 @@ def main():
     
     if "chatbot" not in st.session_state:
         st.session_state.chatbot = HiringAssistantChatbot()
-        initial_greeting = st.session_state.chatbot.get_initial_greeting()
+        initial_greeting = "Hello! I'm the intelligent hiring assistant. I'll be helping with the initial screening process today. To start, could you please tell me your full name?"
         st.session_state.messages.append({"role": "assistant", "content": initial_greeting})
 
     # --- Display Chat History ---
@@ -102,15 +102,17 @@ def main():
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # --- Performance Optimization: Streaming Response ---
+        # --- Response Handling ---
         with st.chat_message("assistant"):
             try:
-                # Get the response generator from the chatbot
-                response_generator = st.session_state.chatbot.get_response(prompt)
-                
-                # Use st.write_stream to display the response as it comes in
-                full_response = st.write_stream(response_generator)
-                
+                response = st.session_state.chatbot.get_response(prompt)
+                if hasattr(response, '__iter__') and not isinstance(response, str):
+                    # If response is a generator or stream, use st.write_stream
+                    full_response = st.write_stream(response)
+                else:
+                    # If response is a string, use st.write
+                    full_response = response
+                    st.write(full_response)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 full_response = "Sorry, I encountered an error. Please try again."

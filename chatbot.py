@@ -5,6 +5,20 @@ import os
 from google.cloud import language_v1
 
 class HiringAssistantChatbot:
+    def get_response(self, user_input):
+        """
+        Gets a response from the Gemini model based on the user's input.
+        Args:
+            user_input (str): The message from the user.
+        Returns:
+            str: The assistant's response.
+        """
+        try:
+            response = self.chat.send_message(user_input)
+            return response.text
+        except Exception as e:
+            print(f"An error occurred while calling the Gemini API: {e}")
+            return "I'm sorry, but I'm having trouble connecting to my services. Please try again in a moment."
     """
     A chatbot class to handle the logic of the hiring assistant using Google's Gemini API.
     It manages the conversation history and interacts with the Gemini model.
