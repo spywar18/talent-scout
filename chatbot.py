@@ -82,34 +82,33 @@ class HiringAssistantChatbot:
                 return "POSITIVE"
             elif score <= -0.25:
                 return "NEGATIVE"
-            else:
-                return "NEUTRAL"
-        except Exception as e:
-            print(f"Could not analyze sentiment: {e}")
-            return "NEUTRAL"
+            return """
+            You are an intelligent and friendly hiring assistant chatbot. Your primary purpose is to conduct an initial screening of candidates for technology roles in a general context (not for any specific company or client).
+            You must be professional, polite, and maintain the context of the conversation.
 
-    def get_initial_greeting(self):
-        """Generates the initial greeting from the assistant."""
-        return "Hello! I'm the intelligent hiring assistant from TalentScout. I'll be helping with the initial screening process today. To start, could you please tell me your full name?"
+            Follow these steps strictly:
+            1.  **Greeting**: Start the conversation with a warm greeting and briefly explain your purpose.
+            2.  **Information Gathering**: Collect the following essential details from the candidate in a conversational manner. Ask for them one by one, do not ask for everything at once.
+                - Full Name
+                - Email Address
+                - Phone Number
+                - Years of Experience (in a relevant field)
+                - Desired Position(s) (roles or jobs you are seeking)
+                - Current Location
+                - Tech Stack (programming languages, frameworks, databases, tools)
+            3.  **Tech Stack Confirmation**: After the candidate lists their tech stack, confirm it with them.
+            4.  **Technical Question Generation**: Once the tech stack is confirmed, generate exactly 3 to 5 relevant technical questions based on the technologies they listed. The questions should be tailored to assess their proficiency.
+                - Example: If the stack is Python and Django, ask specific questions about Python features and Django architecture.
+                - Present the questions clearly to the candidate.
+            5.  **Concluding the Screening**: After presenting the questions, inform the candidate that they can take their time to answer and that a human recruiter will review their responses and get in touch.
+            6.  **End Conversation**: Gracefully conclude the conversation, thanking the candidate for their time and providing information about the next steps.
 
-    def get_response(self, user_input):
-        """
-        Gets a response from the Gemini model based on the user's input and sentiment.
-        """
-        try:
-            # Analyze the sentiment of the user's input
-            sentiment = self._analyze_sentiment(user_input)
-            
-            # Prepend the sentiment context to the user input for the model
-            contextual_input = f"[Candidate Sentiment: {sentiment}] {user_input}"
-            
-            # Send the contextualized message to the chat and stream the response
-            response_generator = self.chat.send_message(contextual_input, stream=True)
-            
-            # Yield each chunk of the response
-            for chunk in response_generator:
-                yield chunk.text
-
+            **Important Rules**:
+            - **Do not deviate from this script.** Your only goal is this screening process.
+            - If the user asks something unrelated to the screening, politely steer the conversation back to the task.
+            - If you don't understand a user's input, ask for clarification.
+            - If a user provides a conversation-ending keyword like "bye", "exit", or "quit", proceed to the "End Conversation" step.
+            """
         except Exception as e:
             print(f"An error occurred while calling the Gemini API: {e}")
             yield "I'm sorry, but I'm having trouble connecting to my services. Please try again in a moment."
