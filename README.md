@@ -1,316 +1,144 @@
-# 🤖 TalentScout AI Hiring Assistant
+# TalentScout - AI Hiring Assistant Chatbot
 
-An intelligent chatbot designed to streamline the initial screening process for technology recruitment. Built with Streamlit and powered by OpenAI's GPT models, this assistant gathers candidate information and generates tailored technical questions based on their declared tech stack.
+## 1. Project Overview
 
-## 📋 Project Overview
+This project is an intelligent **Hiring Assistant Chatbot** developed for "TalentScout," a fictional recruitment agency. The chatbot is designed to automate and enhance the initial screening process for technology job candidates. It interacts with candidates through a clean, web-based interface, gathers essential information, and conducts a dynamic technical assessment based on their declared technology stack.
 
-**TalentScout** is a fictional recruitment agency specializing in technology placements. This AI hiring assistant helps automate the initial candidate screening by:
+The application is built with Python and Streamlit and is powered by Google's Gemini Pro for its core conversational AI. It also includes advanced features like sentiment analysis and multilingual support to create a more empathetic and accessible candidate experience.
 
-- Collecting essential candidate information
-- Understanding their technical background and experience
-- Generating relevant technical questions based on their tech stack
-- Maintaining contextual conversation flow
-- Providing a seamless user experience
+### Live Demo
 
-## 🚀 Features
+**You can interact with the live application here:** [https://hiring-assistant-554647416942.us-central1.run.app/](https://hiring-assistant-554647416942.us-central1.run.app/)
 
-### Core Functionality
-- **Intelligent Greeting**: Welcomes candidates and explains the process
-- **Information Collection**: Gathers name, email, phone, experience, position, location
-- **Tech Stack Analysis**: Identifies programming languages, frameworks, databases, and tools
-- **Dynamic Question Generation**: Creates 3-5 tailored technical questions
-- **Context Management**: Maintains conversation flow and handles follow-ups
-- **Graceful Exit**: Handles conversation-ending keywords and provides next steps
+## 2. Technical Details
 
-### Technical Capabilities
-- **State Management**: Tracks conversation progress through defined states
-- **Information Extraction**: Uses LLM to parse and extract structured data
-- **Fallback Mechanisms**: Handles unexpected inputs and API failures
-- **Real-time Updates**: Shows candidate information in sidebar
-- **Conversation History**: Maintains chat context throughout the session
+* **Programming Language**: Python 3.11
+* **Frontend UI**: Streamlit
+* **Large Language Model (LLM)**: Google Gemini 1.5 Flash
+* **Key Libraries**:
+  * `streamlit` – For building the interactive web interface
+  * `google-generativeai` – Official Python SDK for Gemini API
+  * `google-cloud-language` – For sentiment analysis
+  * `python-dotenv` – For managing environment variables securely
 
-## 🛠️ Installation Instructions
+### Architecture
+
+The application is structured into three main components:
+
+1. **`app.py`** – Main Streamlit application handling UI, session management, and custom styling.
+2. **`chatbot.py`** – Contains `HiringAssistantChatbot` class, manages conversation logic, prompt engineering, and interactions with Google Gemini & Natural Language APIs.
+3. **`utils.py`** – Utility module for helper functions like loading environment variables.
+
+## 3. Prompt Design
+
+The chatbot relies on a detailed system prompt provided to Gemini, located in `chatbot.py`. The prompt defines the bot's persona, workflow, and rules for conversation handling.
+
+**Key Aspects:**
+
+* **Persona Definition** – Friendly, empathetic, professional assistant.
+* **Structured Workflow** – Multi-phase conversation flow: info gathering → technical assessment → evaluation.
+* **Rich Formatting Instructions** – Use Markdown for headings, bold text, code blocks, and lists.
+* **Advanced Feature Integration** – Sentiment and language awareness to adapt tone.
+* **Strict Guardrails** – Prevent the chatbot from revealing instructions and handle unclear input gracefully.
+
+## 4. Challenges and Solutions
+
+* **Challenge:** Initial chatbot responses were raw text and hard to read.  
+  **Solution:** Enhanced prompt with Markdown formatting for better UI rendering.
+
+* **Challenge:** Bot occasionally revealed internal instructions.  
+  **Solution:** Added "Critical Rules of Behavior" to handle unclear input politely.
+
+* **Challenge:** Streamlit UI theme clashed with custom styling.  
+  **Solution:** Added custom CSS in `app.py` for light theme and high-contrast text.
+
+## 5. Installation Instructions
 
 ### Prerequisites
-- Python 3.8 or higher
-- OpenAI API key
 
-### Local Setup
+* Python 3.9+
+* Google Cloud Platform (GCP) account with billing enabled
+* Google API Key with Gemini and Natural Language APIs enabled
 
-1. **Clone the repository**:
-   ```bash
-   git clone <your-repository-url>
-   cd hiring-assistant-chatbot
-   ```
+### Step-by-Step Guide
 
-2. **Create virtual environment**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables**:
-   Create a `.env` file in the project root:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
-
-5. **Run the application**:
-   ```bash
-   streamlit run app.py
-   ```
-
-6. **Access the application**:
-   Open your browser and navigate to `http://localhost:8501`
-
-## 📖 Usage Guide
-
-### For Candidates
-1. **Start Conversation**: The bot greets you and explains its purpose
-2. **Provide Information**: Share your basic details when prompted
-3. **Declare Tech Stack**: List your programming languages, frameworks, and tools
-4. **Answer Questions**: Respond to generated technical questions
-5. **Complete Process**: Receive information about next steps
-
-### For Recruiters
-- **Monitor Progress**: View candidate information in the sidebar
-- **Track Responses**: See conversation state and collected data
-- **Review Answers**: Access technical responses for evaluation
-
-### Conversation Flow
+**1. Clone the Repository:**
 ```
-Greeting → Info Collection → Tech Stack → Question Generation → Technical Assessment → Completion
+git clone <your-repository-url>
+cd hiring-assistant
+
 ```
 
-## 🏗️ Technical Architecture
+**2. Create a Virtual Environment:**
 
-### Libraries & Dependencies
-- **Streamlit**: Frontend web application framework
-- **OpenAI**: GPT-3.5-turbo for natural language processing
-- **Python-dotenv**: Environment variable management
-- **Pandas**: Data manipulation (if needed for analytics)
-- **Dataclasses**: Structured data management
-
-### Core Components
-
-#### 1. ConversationState Enum
-Manages the chatbot's current state:
-- `GREETING`: Initial welcome message
-- `COLLECTING_INFO`: Gathering basic candidate details
-- `TECH_STACK`: Collecting technical skills
-- `GENERATING_QUESTIONS`: Creating tailored questions
-- `ASKING_QUESTIONS`: Technical assessment phase
-- `ENDING`: Conversation conclusion
-
-#### 2. CandidateInfo Dataclass
-Stores candidate information:
-```python
-@dataclass
-class CandidateInfo:
-    full_name: str
-    email: str
-    phone: str
-    experience_years: str
-    desired_position: str
-    current_location: str
-    tech_stack: List[str]
+### Windows
+```
+python -m venv venv
+venv\Scripts\activate
 ```
 
-#### 3. HiringAssistantBot Class
-Main chatbot logic with methods:
-- `get_llm_response()`: Interfaces with OpenAI API
-- `extract_info_from_response()`: Parses user input for structured data
-- `generate_technical_questions()`: Creates tech stack-specific questions
-- `process_message()`: Main conversation handler
+### macOS/Linux
 
-### Model Architecture
-- **Primary Model**: GPT-3.5-turbo
-- **Context Window**: Optimized for conversation length
-- **Temperature**: 0.7 for balanced creativity and consistency
-- **Max Tokens**: 500 per response for concise interactions
-
-## 🔧 Prompt Engineering Strategy
-
-### Information Extraction Prompts
-```python
-system_message = """
-You are an information extraction assistant. Extract candidate information from the user's message.
-Return ONLY a JSON object with specified fields...
-"""
+```
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### Technical Question Generation
-```python
-system_message = """
-You are a technical interviewer. Generate 3-5 relevant technical questions 
-based on the candidate's tech stack. Questions should assess practical knowledge...
-"""
+**3. Install Dependencies:**
+
+```
+pip install -r requirements.txt
 ```
 
-### Design Principles
-1. **Clear Instructions**: Specific, unambiguous prompts
-2. **Structured Output**: JSON format for consistent parsing
-3. **Context Awareness**: Include relevant candidate information
-4. **Adaptability**: Handle diverse tech stacks and experience levels
-5. **Error Handling**: Fallback responses for API failures
 
-## 💡 Key Challenges & Solutions
+**4. Set Up Your API Key:**
+Create a .env file in the root directory:
+```
+GOOGLE_API_KEY="your-google-api-key"
 
-### Challenge 1: Information Extraction Accuracy
-**Problem**: Parsing unstructured user input into structured data
-**Solution**: 
-- Implemented LLM-based extraction with JSON schema
-- Added fallback regex patterns for common technologies
-- Validation and error handling for malformed responses
+```
+**5. Run the Application:**
 
-### Challenge 2: Context Management
-**Problem**: Maintaining conversation flow across multiple states
-**Solution**:
-- State machine architecture with clear transitions
-- Session state management in Streamlit
-- Conversation history tracking
-
-### Challenge 3: Dynamic Question Generation
-**Problem**: Creating relevant questions for diverse tech stacks
-**Solution**:
-- Tech stack-aware prompt engineering
-- Experience level consideration
-- Fallback to generic technical questions
-
-### Challenge 4: User Experience
-**Problem**: Ensuring smooth, intuitive interactions
-**Solution**:
-- Clear conversation states and prompts
-- Real-time information display in sidebar
-- Graceful error handling and recovery
-
-## 🔐 Data Privacy & Security
-
-### Privacy Measures
-- **Simulated Data**: Uses test data for demonstrations
-- **Local Storage**: No persistent data storage by default
-- **Session-based**: Information cleared on session end
-- **GDPR Compliance**: Designed with privacy regulations in mind
-
-### Security Considerations
-- Environment variable management for API keys
-- Input validation and sanitization
-- Error handling without exposing sensitive information
-
-## 🎯 Evaluation Criteria Alignment
-
-### Technical Proficiency (40%)
-✅ Complete hiring assistant functionality
-✅ Effective LLM integration and prompt engineering
-✅ Clean, modular, scalable code architecture
-
-### Problem-Solving & Critical Thinking (30%)
-✅ State-based conversation management
-✅ Dynamic question generation based on tech stack
-✅ Robust error handling and fallback mechanisms
-
-### User Interface & Experience (15%)
-✅ Clean, intuitive Streamlit interface
-✅ Real-time candidate information display
-✅ Smooth conversation flow and interactions
-
-### Documentation & Presentation (10%)
-✅ Comprehensive README with setup instructions
-✅ Clear code documentation and comments
-✅ Usage examples and technical details
-
-## 🚀 Optional Enhancements
-
-### Implemented Features
-- **Custom Styling**: Enhanced UI with CSS customization
-- **Real-time Updates**: Live candidate information display
-- **Conversation Management**: Clear chat and restart functionality
-
-### Future Enhancements
-- **Sentiment Analysis**: Gauge candidate emotions during conversation
-- **Multilingual Support**: Support for multiple languages
-- **Analytics Dashboard**: Recruitment metrics and insights
-- **Database Integration**: Persistent candidate data storage
-- **Email Integration**: Automated follow-up communications
-
-## 📊 Performance Metrics
-
-### Response Time
-- Average response time: ~2-3 seconds
-- API call optimization for faster interactions
-
-### Accuracy
-- Information extraction accuracy: ~85-90%
-- Question relevance rating: High for common tech stacks
-
-### User Experience
-- Conversation completion rate: Target 80%+
-- User satisfaction: Measured through smooth flow completion
-
-## 🚀 Deployment Options
-
-### Local Deployment (Default)
-```bash
+```
 streamlit run app.py
 ```
 
-### Cloud Deployment (Bonus)
-**Streamlit Cloud**:
-1. Push to GitHub repository
-2. Connect to Streamlit Cloud
-3. Configure environment variables
-4. Deploy with automatic updates
+**6. Deployment Guide (Google Cloud Run)**
+```
+1. Create a Dockerfile
+dockerfile
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
 
-**Alternative Platforms**:
-- Heroku
-- AWS EC2
-- Google Cloud Platform
-- Azure Container Instances
+# Set the working directory in the container
+WORKDIR /app
 
-## 🤝 Contributing
+# Copy the requirements file into the container at /app
+COPY requirements.txt .
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-## 📄 License
+# Copy the rest of the application's code into the container at /app
+COPY . .
 
-This project is created for educational and demonstration purposes. Please ensure compliance with OpenAI's usage policies when deploying.
+# Expose the port Streamlit runs on
+EXPOSE 8501
 
-## 📞 Support
+# Define the command to run your app
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.enableCORS=false"]
+```
 
-For questions or issues:
-- Check the troubleshooting section below
-- Review the conversation logs in the sidebar
-- Ensure your OpenAI API key is valid and has sufficient credits
+2. Create a Procfile
+```
+web: streamlit run app.py
+```
 
-## 🔧 Troubleshooting
-
-### Common Issues
-
-**API Key Error**:
-- Ensure `.env` file contains valid `OPENAI_API_KEY`
-- Check API key permissions and credits
-
-**Import Errors**:
-- Verify all dependencies are installed: `pip install -r requirements.txt`
-- Check Python version compatibility (3.8+)
-
-**Conversation Stuck**:
-- Use "Clear Chat" button to restart
-- Check conversation state in sidebar
-
-**Question Generation Issues**:
-- Ensure tech stack is properly collected
-- Check API response logs for errors
-
----
-
-**Built with ❤️ for TalentScout AI Hiring Assistant**
+4. Deploy
+```
+gcloud run deploy hiring-assistant \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated
+```
+After deployment, the command outputs a Service URL — your live link.
